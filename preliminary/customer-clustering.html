@@ -8795,20 +8795,58 @@ Best cluster KPCA Cosine data with Agglomerative based on CDbw score, is K = 8 w
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">describe_cluster</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data_decompose</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">cluster_summary</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data_decompose</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
     <span class="n">score_silhouette</span><span class="p">,</span> <span class="n">score_cdbw</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">(</span><span class="n">data_decompose</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1"> K=</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">, silhouette score: </span><span class="si">{</span><span class="n">score_silhouette</span><span class="si">:</span><span class="s1">8.6f</span><span class="si">}</span><span class="s1">, cdbw_score: </span><span class="si">{</span><span class="n">score_cdbw</span><span class="si">:</span><span class="s1">8.6f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
     
-    <span class="n">describe_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">describe_data</span><span class="p">[</span><span class="s1">'labels'</span><span class="p">]</span> <span class="o">=</span> <span class="n">labels</span>
+    <span class="n">all_cluster_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">all_cluster_data</span><span class="p">[</span><span class="s1">'labels'</span><span class="p">]</span> <span class="o">=</span> <span class="n">labels</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="si">{</span><span class="s2">"-"</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">30</span><span class="si">}</span><span class="se">\n\n</span><span class="s1">&gt; Describe for cluster </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">describe_data</span><span class="p">[</span><span class="n">describe_data</span><span class="p">[</span><span class="s1">'labels'</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
-
-<span class="n">describe_cluster</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">features_decompose</span><span class="p">,</span> <span class="n">columns_kpca_rbf</span><span class="p">,</span> <span class="s1">'KMeans'</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="si">{</span><span class="s2">"-"</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">30</span><span class="si">}</span><span class="se">\n\n</span><span class="s1">&gt; Summary of Cluster </span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
+        <span class="n">cluster_data</span> <span class="o">=</span> <span class="n">all_cluster_data</span><span class="p">[</span><span class="n">all_cluster_data</span><span class="p">[</span><span class="s1">'labels'</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span>
+        
+        <span class="n">summary</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">'Count'</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">cluster_data</span><span class="p">),</span>
+            <span class="s1">'Count Location Bandung'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Location'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Bandung'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Location Jakarta'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Location'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Jakarta'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Min Tenure Months'</span><span class="p">:</span> <span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Tenure Months'</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+            <span class="s1">'Average Tenure Months'</span><span class="p">:</span> <span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Tenure Months'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+            <span class="s1">'Max Tenure Months'</span><span class="p">:</span> <span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Tenure Months'</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+            <span class="s1">'Count Call Center Yes'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Call Center'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Yes'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Call Center No'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Call Center'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'No'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Churn Observations Yes'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Churn Label'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Yes'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Churn Observations No'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Churn Label'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'No'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Min Monthly Purchase (Thou. IDR)'</span><span class="p">:</span> <span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Monthly Purchase (Thou. IDR)'</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+            <span class="s1">'Average Monthly Purchase (Thou. IDR)'</span><span class="p">:</span> <span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Monthly Purchase (Thou. IDR)'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+            <span class="s1">'Max Monthly Purchase (Thou. IDR)'</span><span class="p">:</span> <span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Monthly Purchase (Thou. IDR)'</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+            <span class="s1">'Count Device Class High End'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Device Class'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'High End'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Device Class Mid End'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Device Class'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Mid End'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Device Class Low End'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Device Class'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Low End'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Games Product Yes'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Games Product'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Yes'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Games Product No'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Games Product'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'No'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Games Product No internet service'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Games Product'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'No internet service'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Education Product Yes'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Education Product'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Yes'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Education Product No'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Education Product'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'No'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Education Product No Internet Service'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Education Product'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'No internet service'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Video Product Yes'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Video Product'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Yes'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Video Product No'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Video Product'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'No'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Video Product No Internet Service'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Video Product'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'No internet service'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Video MyApp Yes'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Use MyApp'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Yes'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Video MyApp No'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Use MyApp'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'No'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Video MyApp No Internet Service'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Use MyApp'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'No internet service'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Payment Method Credit'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Payment Method'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Credit'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Payment Method Debit'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Payment Method'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Debit'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Payment Method Digital Wallet'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Payment Method'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Digital Wallet'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="s1">'Count Payment Method Pulsa'</span><span class="p">:</span> <span class="p">(</span><span class="n">cluster_data</span><span class="p">[</span><span class="s1">'Payment Method'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'Pulsa'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="p">}</span>
+        
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">summary</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">key</span><span class="si">:</span><span class="s1">50s</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+        
+<span class="n">cluster_summary</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">features_decompose</span><span class="p">,</span> <span class="n">columns_kpca_rbf</span><span class="p">,</span> <span class="s1">'KMeans'</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -8826,177 +8864,268 @@ KMeans K=7, silhouette score: 0.348551, cdbw_score: 0.235419
 
 ------------------------------
 
-&gt; Describe for cluster 0
+&gt; Summary of Cluster 1
 
-       Customer ID  Tenure Months  Monthly Purchase (Thou. IDR)     Longitude  \
-count   879.000000     879.000000                    879.000000  8.790000e+02   
-mean   3669.755404      10.361775                     32.907304  1.068167e+02   
-std    1958.137431       9.504282                     12.022369  2.843789e-14   
-min       7.000000       0.000000                     23.725000  1.068167e+02   
-25%    2153.000000       2.000000                     25.740000  1.068167e+02   
-50%    3715.000000       8.000000                     26.455000  1.068167e+02   
-75%    5313.000000      18.000000                     33.020000  1.068167e+02   
-max    7041.000000      38.000000                     67.275000  1.068167e+02   
-
-           Latitude  CLTV (Predicted Thou. IDR)  labels  
-count  8.790000e+02                  879.000000   879.0  
-mean  -6.200000e+00                 5257.667349     0.0  
-std    8.886841e-16                 1510.159260     0.0  
-min   -6.200000e+00                 2613.000000     0.0  
-25%   -6.200000e+00                 3916.900000     0.0  
-50%   -6.200000e+00                 5328.700000     0.0  
-75%   -6.200000e+00                 6563.050000     0.0  
-max   -6.200000e+00                 7784.400000     0.0  
-
-------------------------------
-
-&gt; Describe for cluster 1
-
-       Customer ID  Tenure Months  Monthly Purchase (Thou. IDR)    Longitude  \
-count  1212.000000    1212.000000                   1212.000000  1212.000000   
-mean   3707.227723      57.492574                    133.038375   106.994011   
-std    1976.371121      12.128848                     10.371962     0.330604   
-min       3.000000      17.000000                    101.075000   106.816666   
-25%    2146.750000      49.000000                    125.417500   106.816666   
-50%    3727.500000      60.000000                    134.777500   106.816666   
-75%    5410.250000      68.000000                    140.871250   106.816666   
-max    7042.000000      72.000000                    154.375000   107.609810   
-
-          Latitude  CLTV (Predicted Thou. IDR)  labels  
-count  1212.000000                 1212.000000  1212.0  
-mean     -6.359815                 6413.312954     1.0  
-std       0.297925                 1290.728305     0.0  
-min      -6.914744                 2627.300000     1.0  
-25%      -6.200000                 5641.025000     1.0  
-50%      -6.200000                 6523.400000     1.0  
-75%      -6.200000                 7428.525000     1.0  
-max      -6.200000                 8442.200000     1.0  
+Count                                             : 879
+Count Location Bandung                            : 0
+Count Location Jakarta                            : 879
+Min Tenure Months                                 : 0
+Average Tenure Months                             : 10.361774744027304
+Max Tenure Months                                 : 38
+Count Call Center Yes                             : 10
+Count Call Center No                              : 869
+Count Churn Observations Yes                      : 195
+Count Churn Observations No                       : 684
+Min Monthly Purchase (Thou. IDR)                  : 23.725
+Average Monthly Purchase (Thou. IDR)              : 32.90730375426621
+Max Monthly Purchase (Thou. IDR)                  : 67.275
+Count Device Class High End                       : 0
+Count Device Class Mid End                        : 243
+Count Device Class Low End                        : 636
+Count Games Product Yes                           : 9
+Count Games Product No                            : 234
+Count Games Product No internet service           : 636
+Count Education Product Yes                       : 5
+Count Education Product No                        : 238
+Count Education Product No Internet Service       : 636
+Count Video Product Yes                           : 7
+Count Video Product No                            : 236
+Count Video Product No Internet Service           : 636
+Count Video MyApp Yes                             : 14
+Count Video MyApp No                              : 229
+Count Video MyApp No Internet Service             : 636
+Count Payment Method Credit                       : 122
+Count Payment Method Debit                        : 110
+Count Payment Method Digital Wallet               : 487
+Count Payment Method Pulsa                        : 160
 
 ------------------------------
 
-&gt; Describe for cluster 2
+&gt; Summary of Cluster 2
 
-       Customer ID  Tenure Months  Monthly Purchase (Thou. IDR)     Longitude  \
-count  1271.000000    1271.000000                   1271.000000  1.271000e+03   
-mean   2409.182533      14.240755                    109.155559  1.068167e+02   
-std    2018.891299      12.041148                     13.004650  4.264935e-14   
-min       1.000000       1.000000                     79.105000  1.068167e+02   
-25%     781.500000       3.000000                     97.630000  1.068167e+02   
-50%    1615.000000      11.000000                    109.005000  1.068167e+02   
-75%    3998.000000      23.000000                    118.690000  1.068167e+02   
-max    7036.000000      57.000000                    146.835000  1.068167e+02   
-
-           Latitude  CLTV (Predicted Thou. IDR)  labels  
-count  1.271000e+03                 1271.000000  1271.0  
-mean  -6.200000e+00                 5236.918568     2.0  
-std    1.777056e-15                 1527.035224     0.0  
-min   -6.200000e+00                 2603.900000     2.0  
-25%   -6.200000e+00                 3939.000000     2.0  
-50%   -6.200000e+00                 5239.000000     2.0  
-75%   -6.200000e+00                 6606.600000     2.0  
-max   -6.200000e+00                 8364.200000     2.0  
-
-------------------------------
-
-&gt; Describe for cluster 3
-
-       Customer ID  Tenure Months  Monthly Purchase (Thou. IDR)    Longitude  \
-count  1053.000000    1053.000000                   1053.000000  1053.000000   
-mean   4281.302944      57.921178                     92.551543   107.058451   
-std    1676.435041      12.649504                     16.346320     0.365290   
-min      30.000000      23.000000                     46.475000   106.816666   
-25%    2961.000000      49.000000                     79.625000   106.816666   
-50%    4350.000000      61.000000                     93.340000   106.816666   
-75%    5739.000000      69.000000                    105.170000   107.609810   
-max    7034.000000      72.000000                    127.075000   107.609810   
-
-          Latitude  CLTV (Predicted Thou. IDR)  labels  
-count  1053.000000                 1053.000000  1053.0  
-mean     -6.417885                 6382.070370     3.0  
-std       0.329182                 1280.674397     0.0  
-min      -6.914744                 2609.100000     3.0  
-25%      -6.914744                 5564.000000     3.0  
-50%      -6.200000                 6514.300000     3.0  
-75%      -6.200000                 7317.700000     3.0  
-max      -6.200000                 8450.000000     3.0  
+Count                                             : 1212
+Count Location Bandung                            : 271
+Count Location Jakarta                            : 941
+Min Tenure Months                                 : 17
+Average Tenure Months                             : 57.492574257425744
+Max Tenure Months                                 : 72
+Count Call Center Yes                             : 612
+Count Call Center No                              : 600
+Count Churn Observations Yes                      : 252
+Count Churn Observations No                       : 960
+Min Monthly Purchase (Thou. IDR)                  : 101.075
+Average Monthly Purchase (Thou. IDR)              : 133.03837458745875
+Max Monthly Purchase (Thou. IDR)                  : 154.375
+Count Device Class High End                       : 1198
+Count Device Class Mid End                        : 14
+Count Device Class Low End                        : 0
+Count Games Product Yes                           : 558
+Count Games Product No                            : 654
+Count Games Product No internet service           : 0
+Count Education Product Yes                       : 874
+Count Education Product No                        : 338
+Count Education Product No Internet Service       : 0
+Count Video Product Yes                           : 1005
+Count Video Product No                            : 207
+Count Video Product No Internet Service           : 0
+Count Video MyApp Yes                             : 1012
+Count Video MyApp No                              : 200
+Count Video MyApp No Internet Service             : 0
+Count Payment Method Credit                       : 331
+Count Payment Method Debit                        : 364
+Count Payment Method Digital Wallet               : 57
+Count Payment Method Pulsa                        : 460
 
 ------------------------------
 
-&gt; Describe for cluster 4
+&gt; Summary of Cluster 3
 
-       Customer ID  Tenure Months  Monthly Purchase (Thou. IDR)   Longitude  \
-count   729.000000     729.000000                    729.000000  729.000000   
-mean   2792.585734      16.301783                    106.532771  107.515155   
-std    2140.299354      12.229132                     15.298731    0.257306   
-min      34.000000       0.000000                     63.375000  106.816666   
-25%     940.000000       5.000000                     95.615000  107.609810   
-50%    2036.000000      14.000000                    104.715000  107.609810   
-75%    4524.000000      25.000000                    117.455000  107.609810   
-max    7039.000000      49.000000                    144.820000  107.609810   
-
-         Latitude  CLTV (Predicted Thou. IDR)  labels  
-count  729.000000                  729.000000   729.0  
-mean    -6.829445                 5196.135665     4.0  
-std      0.231872                 1510.201029     0.0  
-min     -6.914744                 2605.200000     4.0  
-25%     -6.914744                 3840.200000     4.0  
-50%     -6.914744                 5249.400000     4.0  
-75%     -6.914744                 6533.800000     4.0  
-max     -6.200000                 7790.900000     4.0  
-
-------------------------------
-
-&gt; Describe for cluster 5
-
-       Customer ID  Tenure Months  Monthly Purchase (Thou. IDR)    Longitude  \
-count  1082.000000    1082.000000                   1082.000000  1082.000000   
-mean   3623.552680      13.066543                     55.297098   107.266017   
-std    1992.311885      11.003456                     19.805210     0.393226   
-min       0.000000       0.000000                     24.310000   106.816666   
-25%    1995.750000       3.000000                     32.516250   106.816666   
-50%    3672.000000      11.000000                     63.375000   107.609810   
-75%    5319.000000      21.750000                     71.305000   107.609810   
-max    7032.000000      47.000000                     90.350000   107.609810   
-
-          Latitude  CLTV (Predicted Thou. IDR)  labels  
-count  1082.000000                 1082.000000  1082.0  
-mean     -6.604934                 5245.654991     5.0  
-std       0.354357                 1497.973898     0.0  
-min      -6.914744                 2603.900000     5.0  
-25%      -6.914744                 4003.025000     5.0  
-50%      -6.914744                 5257.850000     5.0  
-75%      -6.200000                 6535.425000     5.0  
-max      -6.200000                 7797.400000     5.0  
+Count                                             : 1271
+Count Location Bandung                            : 0
+Count Location Jakarta                            : 1271
+Min Tenure Months                                 : 1
+Average Tenure Months                             : 14.240755310778914
+Max Tenure Months                                 : 57
+Count Call Center Yes                             : 145
+Count Call Center No                              : 1126
+Count Churn Observations Yes                      : 723
+Count Churn Observations No                       : 548
+Min Monthly Purchase (Thou. IDR)                  : 79.105
+Average Monthly Purchase (Thou. IDR)              : 109.15555861526357
+Max Monthly Purchase (Thou. IDR)                  : 146.835
+Count Device Class High End                       : 1249
+Count Device Class Mid End                        : 22
+Count Device Class Low End                        : 0
+Count Games Product Yes                           : 151
+Count Games Product No                            : 1120
+Count Games Product No internet service           : 0
+Count Education Product Yes                       : 330
+Count Education Product No                        : 941
+Count Education Product No Internet Service       : 0
+Count Video Product Yes                           : 532
+Count Video Product No                            : 739
+Count Video Product No Internet Service           : 0
+Count Video MyApp Yes                             : 527
+Count Video MyApp No                              : 744
+Count Video MyApp No Internet Service             : 0
+Count Payment Method Credit                       : 167
+Count Payment Method Debit                        : 173
+Count Payment Method Digital Wallet               : 140
+Count Payment Method Pulsa                        : 791
 
 ------------------------------
 
-&gt; Describe for cluster 6
+&gt; Summary of Cluster 4
 
-       Customer ID  Tenure Months  Monthly Purchase (Thou. IDR)   Longitude  \
-count   817.000000     817.000000                    817.000000  817.000000   
-mean   4348.550796      53.963280                     35.613476  106.976848   
-std    1588.440394      12.601689                     14.144207    0.318612   
-min      65.000000      24.000000                     23.920000  106.816666   
-25%    3086.000000      44.000000                     26.000000  106.816666   
-50%    4371.000000      53.000000                     31.395000  106.816666   
-75%    5702.000000      66.000000                     34.190000  106.816666   
-max    7038.000000      72.000000                     81.185000  107.609810   
+Count                                             : 1053
+Count Location Bandung                            : 321
+Count Location Jakarta                            : 732
+Min Tenure Months                                 : 23
+Average Tenure Months                             : 57.921177587844255
+Max Tenure Months                                 : 72
+Count Call Center Yes                             : 718
+Count Call Center No                              : 335
+Count Churn Observations Yes                      : 68
+Count Churn Observations No                       : 985
+Min Monthly Purchase (Thou. IDR)                  : 46.475
+Average Monthly Purchase (Thou. IDR)              : 92.55154320987654
+Max Monthly Purchase (Thou. IDR)                  : 127.075
+Count Device Class High End                       : 104
+Count Device Class Mid End                        : 949
+Count Device Class Low End                        : 0
+Count Games Product Yes                           : 731
+Count Games Product No                            : 322
+Count Games Product No internet service           : 0
+Count Education Product Yes                       : 714
+Count Education Product No                        : 339
+Count Education Product No Internet Service       : 0
+Count Video Product Yes                           : 607
+Count Video Product No                            : 446
+Count Video Product No Internet Service           : 0
+Count Video MyApp Yes                             : 619
+Count Video MyApp No                              : 434
+Count Video MyApp No Internet Service             : 0
+Count Payment Method Credit                       : 375
+Count Payment Method Debit                        : 371
+Count Payment Method Digital Wallet               : 149
+Count Payment Method Pulsa                        : 158
 
-         Latitude  CLTV (Predicted Thou. IDR)  labels  
-count  817.000000                  817.000000   817.0  
-mean    -6.344349                 6186.068299     6.0  
-std      0.287118                 1449.529309     0.0  
-min     -6.914744                 2609.100000     6.0  
-25%     -6.200000                 5405.400000     6.0  
-50%     -6.200000                 6412.900000     6.0  
-75%     -6.200000                 7296.900000     6.0  
-max     -6.200000                 8448.700000     6.0  
+------------------------------
+
+&gt; Summary of Cluster 5
+
+Count                                             : 729
+Count Location Bandung                            : 642
+Count Location Jakarta                            : 87
+Min Tenure Months                                 : 0
+Average Tenure Months                             : 16.301783264746227
+Max Tenure Months                                 : 49
+Count Call Center Yes                             : 216
+Count Call Center No                              : 513
+Count Churn Observations Yes                      : 348
+Count Churn Observations No                       : 381
+Min Monthly Purchase (Thou. IDR)                  : 63.375
+Average Monthly Purchase (Thou. IDR)              : 106.53277091906723
+Max Monthly Purchase (Thou. IDR)                  : 144.82000000000002
+Count Device Class High End                       : 545
+Count Device Class Mid End                        : 184
+Count Device Class Low End                        : 0
+Count Games Product Yes                           : 181
+Count Games Product No                            : 548
+Count Games Product No internet service           : 0
+Count Education Product Yes                       : 247
+Count Education Product No                        : 482
+Count Education Product No Internet Service       : 0
+Count Video Product Yes                           : 383
+Count Video Product No                            : 346
+Count Video Product No Internet Service           : 0
+Count Video MyApp Yes                             : 384
+Count Video MyApp No                              : 345
+Count Video MyApp No Internet Service             : 0
+Count Payment Method Credit                       : 96
+Count Payment Method Debit                        : 104
+Count Payment Method Digital Wallet               : 99
+Count Payment Method Pulsa                        : 430
+
+------------------------------
+
+&gt; Summary of Cluster 6
+
+Count                                             : 1082
+Count Location Bandung                            : 613
+Count Location Jakarta                            : 469
+Min Tenure Months                                 : 0
+Average Tenure Months                             : 13.066543438077634
+Max Tenure Months                                 : 47
+Count Call Center Yes                             : 272
+Count Call Center No                              : 810
+Count Churn Observations Yes                      : 258
+Count Churn Observations No                       : 824
+Min Monthly Purchase (Thou. IDR)                  : 24.31
+Average Monthly Purchase (Thou. IDR)              : 55.29709796672829
+Max Monthly Purchase (Thou. IDR)                  : 90.35000000000001
+Count Device Class High End                       : 0
+Count Device Class Mid End                        : 804
+Count Device Class Low End                        : 278
+Count Games Product Yes                           : 293
+Count Games Product No                            : 511
+Count Games Product No internet service           : 278
+Count Education Product Yes                       : 189
+Count Education Product No                        : 615
+Count Education Product No Internet Service       : 278
+Count Video Product Yes                           : 146
+Count Video Product No                            : 658
+Count Video Product No Internet Service           : 278
+Count Video MyApp Yes                             : 150
+Count Video MyApp No                              : 654
+Count Video MyApp No Internet Service             : 278
+Count Payment Method Credit                       : 180
+Count Payment Method Debit                        : 159
+Count Payment Method Digital Wallet               : 446
+Count Payment Method Pulsa                        : 297
+
+------------------------------
+
+&gt; Summary of Cluster 7
+
+Count                                             : 817
+Count Location Bandung                            : 165
+Count Location Jakarta                            : 652
+Min Tenure Months                                 : 24
+Average Tenure Months                             : 53.96328029375765
+Max Tenure Months                                 : 72
+Count Call Center Yes                             : 71
+Count Call Center No                              : 746
+Count Churn Observations Yes                      : 25
+Count Churn Observations No                       : 792
+Min Monthly Purchase (Thou. IDR)                  : 23.919999999999998
+Average Monthly Purchase (Thou. IDR)              : 35.61347613219095
+Max Monthly Purchase (Thou. IDR)                  : 81.185
+Count Device Class High End                       : 0
+Count Device Class Mid End                        : 205
+Count Device Class Low End                        : 612
+Count Games Product Yes                           : 96
+Count Games Product No                            : 109
+Count Games Product No internet service           : 612
+Count Education Product Yes                       : 63
+Count Education Product No                        : 142
+Count Education Product No Internet Service       : 612
+Count Video Product Yes                           : 27
+Count Video Product No                            : 178
+Count Video Product No Internet Service           : 612
+Count Video MyApp Yes                             : 26
+Count Video MyApp No                              : 179
+Count Video MyApp No Internet Service             : 612
+Count Payment Method Credit                       : 251
+Count Payment Method Debit                        : 263
+Count Payment Method Digital Wallet               : 234
+Count Payment Method Pulsa                        : 69
 </pre>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=6110c5ef">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c6fad4b0">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
